@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from .forms import RegistrationForm
 
 
 def index_view(request):
@@ -34,28 +35,38 @@ def logout_view(request):
 
 
 def register_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        email = request.POST.get('email', '')
-        first_name = request.POST.get('first_name', '')
-        last_name = request.POST.get('last_name', '')
+    form = RegistrationForm()
 
-        # Создаем нового пользователя
-        user = User.objects.create_user(
-            username=username,
-            password=password,
-            email=email,
-            first_name=first_name,
-            last_name=last_name
-        )
+    if request.method != 'POST':
+        return render(request, 'register.html', {'form': form})
+    
+    if not form.is_valid():
+        return render(request, 'register.html', {'form': form})
+    
+    username = form.cleaned_data['username']
+    password = form.cleaned_data['password']
+    email = form.cleaned_data['email']
+    first_name = form.cleaned_data['first_name']
+    company_name = form.cleaned_data['company_name']
+    phone_number = form.cleaned_data['phone_number']
 
-        # Вместо простого перенаправления на страницу профиля,
-        # можно добавить дополнительные действия, например, отправку
-        # email с подтверждением регистрации или автоматический вход
-        # пользователя после успешной регистрации.
+    # Создаем нового пользователя
+    user = User.objects.create_user(
+        username=username,
+        password=password,
+        email=email,
+        first_name=first_name,
+    )
+    user.userprofile.company_name = company_name
+    user.userprofile.phone_number = phone_number
+    user.userprofile.save()
 
-        return redirect('/')  # Замените 'profile' на URL вашей страницы профиля пользователя
+    # Вместо простого перенаправления на страницу профиля,
+    # можно добавить дополнительные действия, например, отправку
+    # email с подтверждением регистрации или автоматический вход
+    # пользователя после успешной регистрации.
 
-    return render(request, 'register.html')
+    return redirect('/')
+
+    
     
