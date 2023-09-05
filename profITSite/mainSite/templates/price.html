@@ -1,0 +1,94 @@
+{% load static %}
+{% load l10n %} 
+<h2 class="display-4">Прайс</h2>
+
+<table class="table table-bordered table-hover" id="product-table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Наименование</th>
+            <th scope="col">Цена</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<div class="pagination justify-content-center" id="pagination-container">
+    <ul class="pagination">
+        {% if products.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="первая">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="предыдущая">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {% endif %}
+        
+        <li class="page-item disabled">
+            <span class="page-link">Страница {{ products.number }} из {{ products.paginator.num_pages }}</span>
+        </li>
+        
+        {% if products.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ products.next_page_number }}" aria-label="следующая">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ products.paginator.num_pages }}" aria-label="последняя">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Функция для обновления данных таблицы и пагинации
+        function updateTableAndPagination(url) {
+            // Выполнить AJAX-запрос для получения обновленных данных
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'html', // Ожидаем HTML-контент
+                success: function (data) {
+                    // Найти таблицу и контейнер пагинации в полученных данных
+                    const table = $(data).find('#product-table');
+                    const pagination = $(data).find('#pagination-container');
+
+                    // Заменить текущую таблицу и пагинацию новыми
+                    $('#product-table').replaceWith(table);
+                    $('#pagination-container').replaceWith(pagination);
+
+                    // Прокрутить страницу к таблице
+                    $('html, body').animate({
+                        scrollTop: $('#product-table').offset().top
+                    }, 500); // 500 миллисекунд - время анимации прокрутки
+                },
+                error: function () {
+                    alert('Произошла ошибка при обновлении данных.');
+                }
+            });
+        }
+
+        // Обработчик клика на ссылках пагинации
+        $(document).on('click', '#pagination-container a', function (e) {
+            e.preventDefault(); // Предотвратить переход по ссылке
+            const url = $(this).attr('href'); // Получить URL страницы
+            // Вызвать функцию для обновления данных таблицы и пагинации
+            updateTableAndPagination(url);
+        });
+    });
+</script>

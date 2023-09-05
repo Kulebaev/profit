@@ -5,7 +5,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена')
 
     def __str__(self):
-        return self.name
+        return self.name, self.price
 
     class Meta:
         verbose_name = 'Товар'

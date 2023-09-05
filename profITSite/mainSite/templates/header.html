@@ -5,15 +5,53 @@
     {% include 'change_theme.html' %}
 {% endblock %}
 
-<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-  <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-    <svg width="110" height="40"><image xlink:href="{% static 'img/logotip_mid.png' %}"/></svg>
-  </a>
-
-  <ul class="nav nav-pills">
-    <li class="nav-item"><a href="/" class="nav-link">Главная</a></li>
-    <li class="nav-item"><a href="#" class="nav-link">Прайс-лист</a></li>
-    <li class="nav-item"><a href="#" class="nav-link">Контакты</a></li>
-    <li class="nav-item"><a href="#" class="nav-link">О нас</a></li>
-  </ul>
+<header>
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <svg width="110" height="40"><image xlink:href="{% static 'img/logotip_mid.png' %}"/></svg>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+        <ul class="navbar-nav ml-auto mb-2 mb-md-0">
+            <li class="nav-item"><a href="/" class="nav-link">Главная</a></li>
+            <li class="nav-item"><a href="#anchor-price" class="nav-link">Прайс-лист</a></li>
+            <li class="nav-item"><a href="#anchor-contacts" class="nav-link">Контакты</a></li>
+            <li class="nav-item"><a href="#anchor-about" class="nav-link">О нас</a></li>
+        </ul>
+    </div>
+    </div>
+  </nav>
 </header>
+
+<script>
+  // Получаем ссылку на кнопку гамбургера
+  var navbarToggler = document.querySelector(".navbar-toggler");
+
+  // Получаем все ссылки меню
+  var menuLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+  // Добавляем обработчик события для каждой ссылки меню
+  menuLinks.forEach(function(link) {
+      link.addEventListener("click", function() {
+          // Закрываем меню (сворачиваем его)
+          var navbarCollapse = document.querySelector("#navbarCollapse");
+          var bsCollapse = new bootstrap.Collapse(navbarCollapse);
+          bsCollapse.toggle();
+
+          // Возвращаем кнопку гамбургера в изначальное положение
+          navbarToggler.setAttribute("aria-expanded", "false");
+          navbarToggler.classList.add("collapsed");
+      });
+  });
+</script>
+
+
+
+
+
+
+

@@ -1,0 +1,31 @@
+{% load static %}
+{% load l10n %}
+
+
+    <div class="row align-items-center g-lg-5 py-5">
+      <div class="col-lg-7 text-center text-lg-start">
+        <h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">Получите консультацию</h1>
+        <p class="col-lg-10 fs-4">Мы готовы предложить широкий спектр услуг, начиная с обеспечения вашего
+            предприятия торговым оборудованием до комплексного обучения ваших сотрудников.</p>
+      </div>
+      <div class="col-md-10 mx-auto col-lg-5">
+        <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" placeholder="Имя" required>
+                <label for="floatingInput">Имя*</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInputNumber" placeholder="Номер" required>
+                <label for="floatingInputNumber">Номер*</label>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea class="form-control" id="floatingComment" placeholder="Комментарий"></textarea>
+                <label for="floatingComment">Комментарий</label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Заказать звонок</button>
+            <hr class="my-4">
+            <small class="text-body-secondary">Поля помеченные "*" обязательны для заполнения.</small>
+        </form>
+      </div>
+    </div>
+ 
