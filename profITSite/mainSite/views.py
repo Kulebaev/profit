@@ -3,6 +3,8 @@ from django.core.paginator import Paginator
 from .models import Product
 from oauth2client.service_account import ServiceAccountCredentials
 from .bot import bot
+from django.contrib import messages
+from django.shortcuts import redirect
 
 
 def index_view(request):
@@ -23,7 +25,11 @@ def index_view(request):
 
         # Отправьте сообщение в Telegram
         chat_id = '-1001900918491'
-        bot.send_message(chat_id ,message_text)  
+        bot.send_message(chat_id ,message_text)
+        
+        messages.success(request, 'Сообщение успешно отправлено!')
+
+        return redirect('index')  
         
     return render(request, 'index.html', {'products': products})
 
