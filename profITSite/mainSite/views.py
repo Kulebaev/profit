@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from .models import Product
 from oauth2client.service_account import ServiceAccountCredentials
+from .bot import bot
+
 
 def index_view(request):
 
@@ -11,7 +13,21 @@ def index_view(request):
 
     products = paginator.get_page(page)  # Получаем объекты для текущей страницы
 
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        number = request.POST.get('number')
+        comment = request.POST.get('comment')
+
+        # Создайте текст сообщения для отправки
+        message_text = f"Имя: {name}\nНомер: {number}\nКомментарий: {comment}"
+
+        # Отправьте сообщение в Telegram
+        chat_id = '-1001900918491'
+        bot.send_message(chat_id ,message_text)  
+        
     return render(request, 'index.html', {'products': products})
+
+    
     
 
 def about_view(request):

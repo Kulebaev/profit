@@ -2,30 +2,80 @@
 {% load l10n %}
 
 
-    <div class="row align-items-center g-lg-5 py-5">
-      <div class="col-lg-7 text-center text-lg-start">
+<div class="row align-items-center g-lg-5 py-5">
+    <div class="col-lg-7 text-center text-lg-start">
         <h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">Получите консультацию</h1>
         <p class="col-lg-10 fs-4">Мы готовы предложить широкий спектр услуг, начиная с обеспечения вашего
             предприятия торговым оборудованием до комплексного обучения ваших сотрудников.</p>
-      </div>
-      <div class="col-md-10 mx-auto col-lg-5">
-        <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+    </div>
+    <div class="col-md-10 mx-auto col-lg-5">
+        <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" method="post">
+            {% csrf_token %}
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" placeholder="Имя" required>
+                <input type="text" class="form-control" id="floatingInput" placeholder="Имя" required name="name">
                 <label for="floatingInput">Имя*</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInputNumber" placeholder="Номер" required>
+                <input type="text" class="form-control" id="floatingInputNumber" placeholder="Номер" required
+                    oninput="formatPhoneNumber(this);" name="number">
                 <label for="floatingInputNumber">Номер*</label>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="floatingComment" placeholder="Комментарий"></textarea>
+                <textarea class="form-control" id="floatingComment" placeholder="Комментарий" name="comment"></textarea>
                 <label for="floatingComment">Комментарий</label>
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Заказать звонок</button>
             <hr class="my-4">
             <small class="text-body-secondary">Поля помеченные "*" обязательны для заполнения.</small>
         </form>
-      </div>
+        
     </div>
- 
+</div>
+
+<script>
+    function formatPhoneNumber(input) {
+        // Удаление всех нечисловых символов из введенного номера
+        var phoneNumber = input.value.replace(/\D/g, '');
+    
+        // Ограничение длины номера
+        if (phoneNumber.length > 15) {
+            phoneNumber = phoneNumber.slice(0, 15);
+        }
+
+        // Удаление всех тире
+        phoneNumber = phoneNumber.replace(/-/g, '');
+
+        // Форматирование номера как +7 (XXX) XXX-XX-XX
+        var formattedPhoneNumber = '+7';
+        if (phoneNumber.length >= 2) {
+            formattedPhoneNumber += ' (' + phoneNumber.slice(1, 4);
+        }
+        if (phoneNumber.length >= 5) {
+            formattedPhoneNumber += ') ' + phoneNumber.slice(4, 7);
+        }
+        if (phoneNumber.length >= 8) {
+            formattedPhoneNumber += '-' + phoneNumber.slice(7, 9) + '' + phoneNumber.slice(9, 11);
+        }
+    
+        // Обновление значения в поле ввода
+        input.value = formattedPhoneNumber;
+    }
+
+    document.getElementById('validationServer01').addEventListener('keydown', function (e) {
+        // Проверяем, является ли событие нажатием клавиши Backspace
+        if (e.key === 'Backspace')  {
+            // Удаление символа из строки
+            var phoneNumber = this.value.replace(/\D/g, '');
+            phoneNumber = phoneNumber.slice(0, phoneNumber.length - 1);
+            formatPhoneNumber({ value: phoneNumber }, this);
+            e.preventDefault(); // Отмена действия по умолчанию для Backspace
+        }
+    });
+</script>
+
+
+
+
+
+
+    
