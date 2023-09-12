@@ -28,6 +28,34 @@
 </header>
 
 <script>
+  $(document).ready(function() {
+    // Ваш код для удаления хеш-фрагмента при клике на якорную ссылку
+    $('a').on('click', function(e) {
+    var href = this.getAttribute('href');
+    var myHref = href.split('#');
+    if (myHref[0] === "/" || myHref[0] === "") {
+      // Если ссылка ведет на "/", то перезагружаем страницу
+      return true;
+    }
+    e.preventDefault();
+  });
+    
+    // Добавляем обработку якорных ссылок для плавного скролла
+    $('a.nav-link').on('click', function(e) {
+      var href = this.getAttribute('href');
+      var target = $(href);
+      if (target.length) {
+        e.preventDefault();
+        $('html, body').animate({
+          scrollTop: target.offset().top
+        }, 1000); // Задайте желаемую продолжительность анимации
+      }
+    });
+  });
+  </script>
+  
+
+<script>
   // Получаем ссылку на кнопку гамбургера
   var navbarToggler = document.querySelector(".navbar-toggler");
 
